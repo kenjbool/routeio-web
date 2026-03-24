@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Routeio - Connecting Strava...</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #f5f5f5;
+      text-align: center;
+    }
+    .container { padding: 20px; }
+    .logo { font-size: 24px; font-weight: 700; color: #1d9e75; }
+    p { color: #666; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">Routeio</div>
+    <p>Connecting your Strava account...</p>
+    <p>You'll be redirected back to the app shortly.</p>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const state = params.get('state');
+    const error = params.get('error');
+
+    if (error) {
+      document.querySelector('p').textContent = 'Connection cancelled. You can close this page.';
+    } else if (code) {
+      const redirectUrl = `routeio://strava?code=${code}&state=${state}`;
+      window.location.href = redirectUrl;
+      
+      setTimeout(() => {
+        document.querySelector('p').textContent = 
+          'If the app did not open automatically, please close this page and try again.';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
