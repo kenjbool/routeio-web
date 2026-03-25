@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog — Routeio</title>
+  <meta name="description" content="See what's new in Routeio — release notes and updates." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #1d9e75;
+      --green-dark: #0f6e56;
+      --green-light: #e1f5ee;
+      --green-mid: #9fe1cb;
+      --text: #0f1712;
+      --text-secondary: #4a5e56;
+      --text-muted: #8a9e97;
+      --bg: #ffffff;
+      --bg-secondary: #f4f9f7;
+      --border: #e0ebe7;
+      --radius: 16px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--green); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    .nav-cta {
+      background: var(--green);
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+    }
+
+    .nav-cta:hover { background: var(--green-dark) !important; }
+
+    .hero {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 5%;
+    }
+
+    .hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 52px);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--text-secondary);
+      max-width: 480px;
+    }
+
+    .changelog {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 64px 5%;
+    }
+
+    .release {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 64px;
+    }
+
+    .release:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .release-meta {
+      position: sticky;
+      top: 80px;
+      align-self: start;
+    }
+
+    .release-version {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .release-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .release-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 4px 10px;
+      border-radius: 50px;
+    }
+
+    .badge-beta {
+      background: #faeeda;
+      color: #854f0b;
+    }
+
+    .badge-latest {
+      background: var(--green-light);
+      color: var(--green-dark);
+    }
+
+    .badge-patch {
+      background: #e6f1fb;
+      color: #185fa5;
+    }
+
+    .release-content h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .release-content .subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .change-group {
+      margin-bottom: 24px;
+    }
+
+    .change-group-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .label-new { color: var(--green-dark); }
+    .label-improved { color: #185fa5; }
+    .label-fixed { color: #854f0b; }
+
+    .label-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .dot-new { background: var(--green); }
+    .dot-improved { background: #378add; }
+    .dot-fixed { background: #ef9f27; }
+
+    .change-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .change-list li {
+      display: flex;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      padding: 10px 14px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .change-list li::before {
+      content: '—';
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 28px;
+      transition: background 0.2s;
+    }
+
+    .download-btn:hover { background: var(--green-dark); }
+
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 32px 5%;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .footer-logo span { color: var(--green); }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover { color: var(--green); }
+
+    .footer-copy { font-size: 12px; color: var(--text-muted); }
+
+    @media (max-width: 700px) {
+      .release {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .release-meta { position: static; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">Route<span>io</span></a>
+    <ul class="nav-links">
+      <li><a href="/#features">Features</a></li>
+      <li><a href="/#how">How it works</a></li>
+      <li><a href="/#privacy">Privacy</a></li>
+      <li><a href="mailto:ken@routeio.app">Contact</a></li>
+      <li><a href="https://expo.dev/accounts/ken-barchambool/projects/routely-fresh/builds/0c21d490-d798-44b6-ac12-40155ebbdfef" class="nav-cta">Download</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Changelog</div>
+      <h1>What's new in Routeio</h1>
+      <p>Every update, improvement and fix — in one place.</p>
+    </div>
+  </div>
+
+  <div class="changelog">
+
+    <!-- ── HOW TO ADD A NEW RELEASE ────────────────────────────────────────
+         Copy the entire <div class="release"> block below, paste it above
+         this comment, update the version, date, title, subtitle and lists.
+         Change badge class to: badge-latest (newest), badge-beta, badge-patch
+    ──────────────────────────────────────────────────────────────────────── -->
+
+    <!-- v1.0.0 -->
+    <div class="release">
+      <div class="release-meta">
+        <div class="release-version">v1.0.0</div>
+        <div class="release-date">March 2026</div>
+        <span class="release-badge badge-latest badge-beta">Beta</span>
+      </div>
+      <div class="release-content">
+        <h2>First beta release 🎉</h2>
+        <p class="subtitle">
+          The first version of Routeio is here. Generate routes, navigate them live,
+          upload to Strava and track your activity history — all from one app.
+        </p>
+
+        <div class="change-group">
+          <div class="change-group-label label-new">
+            <div class="label-dot dot-new"></div>
+            New
+          </div>
+          <ul class="change-list">
+            <li>Smart route generation — set your distance and activity, get a real route</li>
+            <li>Loop and point-to-point routing modes</li>
+            <li>Live GPS navigation with turn-by-turn directions</li>
+            <li>Pause and resume mid-activity</li>
+            <li>Post-activity summary with distance, pace and time</li>
+            <li>Strava integration — upload activities with one tap</li>
+            <li>GPX export for Garmin, Wahoo and other devices</li>
+            <li>Road issue reporting — share hazards with the community</li>
+            <li>Save and manage your favourite routes</li>
+            <li>Location search — plan routes from anywhere in the world</li>
+            <li>Running, cycling, trail running and hiking activity types</li>
+            <li>km and miles support</li>
+          </ul>
+        </div>
+
+        <a href="https://expo.dev/accounts/ken-barchambool/projects/routely-fresh/builds/0c21d490-d798-44b6-ac12-40155ebbdfef" class="download-btn">
+          ↓ Download v1.0.0
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <a href="/" class="footer-logo">Route<span>io</span></a>
+      <ul class="footer-links">
+        <li><a href="/#features">Features</a></li>
+        <li><a href="/changelog.html">Changelog</a></li>
+        <li><a href="/#privacy">Privacy policy</a></li>
+        <li><a href="mailto:ken@routeio.app">Contact</a></li>
+      </ul>
+      <span class="footer-copy">© 2026 Routeio</span>
+    </div>
+  </footer>
+
+</body>
+</html>
