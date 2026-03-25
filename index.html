@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Routeio — Your route. Your pace.</title>
+  <meta name="description" content="Generate the perfect running, cycling or trail route from wherever you are. Navigate it. Upload it. Repeat." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #1d9e75;
+      --green-dark: #0f6e56;
+      --green-light: #e1f5ee;
+      --green-mid: #9fe1cb;
+      --text: #0f1712;
+      --text-secondary: #4a5e56;
+      --text-muted: #8a9e97;
+      --bg: #ffffff;
+      --bg-secondary: #f4f9f7;
+      --border: #e0ebe7;
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--green); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    .nav-cta {
+      background: var(--green);
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+    }
+
+    .nav-cta:hover { background: var(--green-dark) !important; color: white !important; }
+
+    .nav-mobile-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
+      color: var(--text);
+    }
+
+    /* HERO */
+    .hero {
+      padding: 96px 5% 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(42px, 5vw, 64px);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green);
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green);
+      color: white;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      color: var(--text-secondary);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .btn-secondary:hover { border-color: var(--green-mid); transform: translateY(-1px); }
+
+    .hero-activities {
+      display: flex;
+      gap: 20px;
+    }
+
+    .activity-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* HERO VISUAL */
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-frame {
+      width: 280px;
+      height: 560px;
+      background: var(--text);
+      border-radius: 44px;
+      padding: 12px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: var(--bg-secondary);
+      border-radius: 34px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-map {
+      width: 100%;
+      height: 55%;
+      background: #d4e9e2;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.3;
+    }
+
+    .map-road {
+      position: absolute;
+      background: white;
+      border-radius: 2px;
+    }
+
+    .route-line {
+      position: absolute;
+      top: 30%;
+      left: 15%;
+      width: 70%;
+      height: 3px;
+      background: var(--green);
+      border-radius: 2px;
+      transform: rotate(-8deg);
+    }
+
+    .route-line::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      right: -6px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid var(--green);
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+    }
+
+    .route-dot {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: var(--green);
+      border: 3px solid white;
+      border-radius: 50%;
+      top: calc(30% - 5px);
+      left: 13%;
+    }
+
+    .route-dot-end {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #e24b4a;
+      border: 3px solid white;
+      border-radius: 50%;
+      top: calc(30% - 5px);
+      right: 13%;
+      transform: translateY(4px);
+    }
+
+    .phone-content {
+      padding: 16px;
+    }
+
+    .phone-stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .phone-stat {
+      background: white;
+      border-radius: 12px;
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .phone-stat-val {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green);
+      display: block;
+    }
+
+    .phone-stat-lbl {
+      font-size: 10px;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .phone-btn {
+      width: 100%;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .floating-badge {
+      position: absolute;
+      background: white;
+      border-radius: 14px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-strava {
+      bottom: 100px;
+      right: -24px;
+      color: #FC4C02;
+    }
+
+    .badge-distance {
+      top: 80px;
+      left: -32px;
+      color: var(--green-dark);
+    }
+
+    /* STATS */
+    .stats-strip {
+      background: var(--green);
+      padding: 40px 5%;
+    }
+
+    .stats-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0 24px;
+      border-right: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 40px;
+      color: white;
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+    }
+
+    /* FEATURES */
+    .features {
+      padding: 96px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 56px;
+      max-width: 560px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(29,158,117,0.1);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--green-light);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* HOW IT WORKS */
+    .how {
+      background: var(--bg-secondary);
+      padding: 96px 5%;
+    }
+
+    .how-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-num {
+      width: 56px;
+      height: 56px;
+      background: var(--green);
+      color: white;
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .step h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* INTEGRATIONS */
+    .integrations {
+      padding: 96px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .integration-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .integration-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* CTA */
+    .cta {
+      background: var(--text);
+      padding: 96px 5%;
+      text-align: center;
+    }
+
+    .cta-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      color: white;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .cta h2 em { color: var(--green-mid); font-style: italic; }
+
+    .cta p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 36px;
+    }
+
+    .cta-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      color: var(--text);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s;
+    }
+
+    .btn-white:hover { transform: translateY(-1px); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .btn-outline:hover { border-color: rgba(255,255,255,0.5); transform: translateY(-1px); }
+
+    /* PRIVACY */
+    .privacy {
+      padding: 96px 5%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .privacy h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .privacy-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    .privacy h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 32px 0 10px;
+    }
+
+    .privacy p, .privacy li {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .privacy ul {
+      padding-left: 20px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 32px 5%;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .footer-logo span { color: var(--green); }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--green); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; text-align: center; gap: 48px; }
+      .hero p { max-width: 100%; }
+      .hero-btns { justify-content: center; }
+      .hero-activities { justify-content: center; flex-wrap: wrap; }
+      .hero-visual { order: -1; }
+      .phone-frame { width: 240px; height: 480px; }
+      .badge-strava { right: -12px; }
+      .badge-distance { left: -12px; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding: 16px; }
+      .stat-item:last-child { border-bottom: none; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .steps::before { display: none; }
+      .nav-links { display: none; }
+      .nav-mobile-btn { display: block; }
+    }
+
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">Route<span>io</span></a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#privacy">Privacy</a></li>
+      <li><a href="mailto:ken@routeio.app">Contact</a></li>
+      <li><a href="https://expo.dev/accounts/ken-barchambool/projects/routely-fresh/builds/0c21d490-d798-44b6-ac12-40155ebbdfef" class="nav-cta">Download</a></li>
+    </ul>
+    <button class="nav-mobile-btn">☰</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Now in beta · Android</div>
+      <h1>Your route.<br><em>Your pace.</em></h1>
+      <p>Generate the perfect running, cycling or trail route from wherever you are. Navigate it live. Upload to Strava. Repeat.</p>
+      <div class="hero-btns">
+        <a href="https://expo.dev/accounts/ken-barchambool/projects/routely-fresh/builds/0c21d490-d798-44b6-ac12-40155ebbdfef" class="btn-primary">
+          ↓ Download for Android
+        </a>
+        <a href="#features" class="btn-secondary">
+          See features
+        </a>
+      </div>
+      <div class="hero-activities">
+        <div class="activity-pill">🏃 Running</div>
+        <div class="activity-pill">🚴 Cycling</div>
+        <div class="activity-pill">🥾 Trail</div>
+        <div class="activity-pill">🧭 Hiking</div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-map">
+            <div class="map-road" style="top:20%;left:0;width:100%;height:6px;transform:rotate(-3deg);opacity:0.5;"></div>
+            <div class="map-road" style="top:50%;left:0;width:100%;height:4px;opacity:0.4;"></div>
+            <div class="map-road" style="top:0;left:30%;width:6px;height:100%;opacity:0.4;"></div>
+            <div class="map-road" style="top:0;left:65%;width:4px;height:100%;opacity:0.3;"></div>
+            <div class="route-line"></div>
+            <div class="route-dot"></div>
+            <div class="route-dot-end"></div>
+          </div>
+          <div class="phone-content">
+            <div class="phone-stat-row">
+              <div class="phone-stat">
+                <span class="phone-stat-val">10.2</span>
+                <span class="phone-stat-lbl">km</span>
+              </div>
+              <div class="phone-stat">
+                <span class="phone-stat-val">62</span>
+                <span class="phone-stat-lbl">min</span>
+              </div>
+              <div class="phone-stat">
+                <span class="phone-stat-val">🏃</span>
+                <span class="phone-stat-lbl">Run</span>
+              </div>
+            </div>
+            <div class="phone-btn">Start Navigation →</div>
+          </div>
+        </div>
+      </div>
+      <div class="floating-badge badge-strava">
+        <span style="color:#FC4C02;font-size:16px;">●</span> Uploaded to Strava
+      </div>
+      <div class="floating-badge badge-distance">
+        📍 10.2 km · Norwich
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <span class="stat-num">5–200</span>
+        <span class="stat-label">km route range</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">±8%</span>
+        <span class="stat-label">distance accuracy</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">4</span>
+        <span class="stat-label">activity types</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">Free</span>
+        <span class="stat-label">to download</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-eyebrow">Features</div>
+    <h2 class="section-title">Everything you need to explore further</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🗺️</div>
+        <h3>Smart route generation</h3>
+        <p>Set your distance, pick your activity and let Routeio build the perfect loop or point-to-point route from wherever you are.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📍</div>
+        <h3>Turn-by-turn navigation</h3>
+        <p>Live GPS tracking with turn-by-turn directions. Pause, resume and report road issues to the community in real time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Activity summaries</h3>
+        <p>Detailed stats after every activity. Distance, pace, time and elevation — all in one clean summary screen.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Strava integration</h3>
+        <p>Upload activities directly to Strava with one tap. Export GPX files for Garmin, Wahoo and other devices.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Plan ahead</h3>
+        <p>Search any location and plan routes before you travel. Save your favourites for later or share them with friends.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚠️</div>
+        <h3>Community reports</h3>
+        <p>Report road closures, potholes and hazards in real time — helping every Routeio user stay safe on their route.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="how-inner">
+      <div class="section-eyebrow">How it works</div>
+      <h2 class="section-title">From your door in four steps</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Set your distance</h3>
+          <p>Choose how far you want to go and pick your activity type — run, cycle, trail or hike.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Generate your route</h3>
+          <p>Routeio builds an accurate loop or point-to-point route from your current location.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Navigate it live</h3>
+          <p>Follow turn-by-turn directions with live GPS. Pause, report issues and stay on track.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Upload and repeat</h3>
+          <p>See your activity summary and upload straight to Strava or export a GPX for your device.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTEGRATIONS -->
+  <section class="integrations" id="integrations">
+    <div class="section-eyebrow">Integrations</div>
+    <h2 class="section-title">Works with your favourite apps</h2>
+    <div class="integration-pills">
+      <div class="integration-pill">
+        <div class="pill-dot" style="background:#FC4C02;"></div>
+        Strava
+      </div>
+      <div class="integration-pill">
+        <div class="pill-dot" style="background:#006A8E;"></div>
+        Garmin Connect
+      </div>
+      <div class="integration-pill">
+        <div class="pill-dot" style="background:#e24b4a;"></div>
+        Wahoo
+      </div>
+      <div class="integration-pill">
+        <div class="pill-dot" style="background:#888;"></div>
+        Apple Health <span style="font-size:11px;color:#aaa;margin-left:4px;">coming soon</span>
+      </div>
+      <div class="integration-pill">
+        <div class="pill-dot" style="background:#888;"></div>
+        Google Fit <span style="font-size:11px;color:#aaa;margin-left:4px;">coming soon</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-inner">
+      <h2>Ready to <em>explore?</em></h2>
+      <p>Download Routeio free for Android. iOS coming soon.</p>
+      <div class="cta-btns">
+        <a href="https://expo.dev/accounts/ken-barchambool/projects/routely-fresh/builds/0c21d490-d798-44b6-ac12-40155ebbdfef" class="btn-white">
+          ↓ Download for Android
+        </a>
+        <a href="mailto:ken@routeio.app" class="btn-outline">
+          Get in touch
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY -->
+  <section class="privacy" id="privacy">
+    <h2>Privacy policy</h2>
+    <p class="privacy-date">Last updated: March 2026</p>
+
+    <h3>What we collect</h3>
+    <ul>
+      <li>Email address — to create and manage your account</li>
+      <li>Location data — to generate routes and track activities</li>
+      <li>Activity data — distance, pace, time and routes completed</li>
+      <li>Road reports — submitted voluntarily by you</li>
+    </ul>
+
+    <h3>How we use it</h3>
+    <ul>
+      <li>To provide the Routeio service</li>
+      <li>To generate personalised routes from your location</li>
+      <li>To save your activity history</li>
+      <li>We never sell your data to third parties</li>
+    </ul>
+
+    <h3>Third party services</h3>
+    <ul>
+      <li>Mapbox — for maps and routing (mapbox.com/legal/privacy)</li>
+      <li>Supabase — for secure data storage (supabase.com/privacy)</li>
+      <li>Strava — only if you choose to connect (strava.com/legal/privacy)</li>
+      <li>RevenueCat — for subscription management (revenuecat.com/privacy)</li>
+    </ul>
+
+    <h3>Your rights</h3>
+    <p>You can delete your account and all associated data at any time by contacting us at <a href="mailto:ken@routeio.app" style="color:var(--green);">ken@routeio.app</a>. We will process all deletion requests within 30 days.</p>
+
+    <h3>Contact</h3>
+    <p>For any privacy related questions please email <a href="mailto:ken@routeio.app" style="color:var(--green);">ken@routeio.app</a></p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">Route<span>io</span></a>
+      <ul class="footer-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#privacy">Privacy policy</a></li>
+        <li><a href="mailto:ken@routeio.app">Contact</a></li>
+      </ul>
+      <span class="footer-copy">© 2026 Routeio</span>
+    </div>
+  </footer>
+
+</body>
+</html>
