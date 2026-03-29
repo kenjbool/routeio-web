@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delete Account — Routeio</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --green: #1d9e75; --text: #0f1712; --border: #e0ebe7; }
+    body { font-family: 'DM Sans', sans-serif; background: #f4f9f7; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .card { background: white; border-radius: 16px; padding: 40px; max-width: 480px; width: 100%; border: 1px solid var(--border); }
+    .logo { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 24px; }
+    .logo span { color: var(--green); }
+    h1 { font-size: 24px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    p { font-size: 15px; color: #4a5e56; line-height: 1.6; margin-bottom: 24px; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+    input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: inherit; margin-bottom: 16px; outline: none; }
+    input:focus, textarea:focus { border-color: var(--green); }
+    textarea { height: 100px; resize: vertical; }
+    button { width: 100%; background: var(--green); color: white; border: none; padding: 14px; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    button:hover { background: #0f6e56; }
+    .success { display: none; text-align: center; padding: 20px; }
+    .success h2 { color: var(--green); margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Route<span>io</span></div>
+    <h1>Delete your account</h1>
+    <p>Submit this form to request deletion of your Routeio account and all associated data. We'll process your request within 30 days and send a confirmation to your email.</p>
+    
+    <div id="form">
+      <label>Email address associated with your account</label>
+      <input type="email" id="email" placeholder="you@example.com" required />
+      
+      <label>Reason for deletion (optional)</label>
+      <textarea id="reason" placeholder="Let us know why you're leaving..."></textarea>
+      
+      <button onclick="submitRequest()">Submit deletion request</button>
+    </div>
+
+    <div class="success" id="success">
+      <h2>Request received ✓</h2>
+      <p>We'll process your deletion request within 30 days and send a confirmation to your email address.</p>
+    </div>
+  </div>
+
+  <script>
+    function submitRequest() {
+      const email = document.getElementById('email').value;
+      if (!email) { alert('Please enter your email address.'); return; }
+      const reason = document.getElementById('reason').value;
+      const subject = encodeURIComponent('Account Deletion Request — ' + email);
+      const body = encodeURIComponent('Email: ' + email + '\nReason: ' + (reason || 'Not provided'));
+      window.location.href = 'mailto:ken@routeio.app?subject=' + subject + '&body=' + body;
+      document.getElementById('form').style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
