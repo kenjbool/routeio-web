@@ -70,11 +70,29 @@
     <a href="routeio://verified" class="btn">Open Routeio</a>
     <p class="hint">If the button doesn't work, simply close this page and reopen the app.</p>
   </div>
+
   <script>
-    // Try to open app automatically after short delay
-    setTimeout(() => {
-      window.location.href = 'routeio://verified';
-    }, 1500);
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
+    
+    if (status === 'invalid') {
+      document.querySelector('.icon').textContent = '❌';
+      document.querySelector('h1').textContent = 'Invalid Link';
+      document.querySelector('h1').style.color = '#ef4444';
+      document.querySelector('p').textContent = 'This verification link is invalid or has already been used.';
+      document.querySelector('.btn').style.display = 'none';
+    } else if (status === 'expired') {
+      document.querySelector('.icon').textContent = '⏰';
+      document.querySelector('h1').textContent = 'Link Expired';
+      document.querySelector('h1').style.color = '#f97316';
+      document.querySelector('p').textContent = 'This link has expired. Please request a new verification email from the app.';
+      document.querySelector('.btn').style.display = 'none';
+    } else {
+      // Success — try to open app automatically
+      setTimeout(() => {
+        window.location.href = 'routeio://verified';
+      }, 1500);
+    }
   </script>
 </body>
 </html>
